@@ -8,18 +8,25 @@ use solana_program::{
     sysvar::{rent::Rent, Sysvar},
     program::invoke,
 };
+
+const OWNER_SIZE: usize = 32;
+const HEALTH_SIZE: usize = 2;
+const SPEED_SIZE: usize = 1;
+const LOCATION_SIZE: usize = 32;
 const MAX_BOARD_WIDTH: u8 = 64;
 const MAX_BOARD_HEIGHT: u8 = 128;
 const DATA_SIZE_PER_UNIT: u8 = 3; // Component type, input 1, component specific data,
 
 fn spacecraft_account_size() -> usize {
-    const HEALTH_SIZE: usize = 2;
-    const SPEED_SIZE: usize = 1;
-    const LOCATION_SIZE: usize = 32;
     (MAX_BOARD_HEIGHT as usize) * (MAX_BOARD_WIDTH as usize) * (DATA_SIZE_PER_UNIT as usize)
         + LOCATION_SIZE
         + SPEED_SIZE
         + HEALTH_SIZE
+        + OWNER_SIZE
+}
+
+fn set_health(data: &mut [u8], health :u16){
+    data[OWNER_SIZE..(OWNER_SIZE + HEALTH_SIZE)].copy_from_slice(&health.to_le_bytes());
 }
 
 pub fn create_spacecraft_account<'a>(
@@ -30,13 +37,21 @@ pub fn create_spacecraft_account<'a>(
     // Get the accounts
     let payer_account = next_account_info(accounts_iter)?;
     let new_account = next_account_info(accounts_iter)?;
-    let system_program = next_account_info(accounts_iter)?;
 
     let account_size = spacecraft_account_size();
-    let rent = Rent::get()?.minimum_balance(account_size);
-    let instruction = &system_instruction::create_account(payer_account.key, new_account.key, rent, account_size as u64, system_program.key);
+    if new_account.data_len() != account_size{
+        return Err(ProgramError::AccountDataTooSmall);
+    }
+    if new_account.owner.to_string() != crate::ID{
+        return Err(ProgramError::IllegalOwner);
+    }
 
-    invoke(instruction, &[payer_account.clone(), new_account.clone()])?;
+    let mut new_data = new_account.try_borrow_mut_data().unwrap();
+    new_data[0..32].copy_from_slice(&payer_account.key.to_bytes());
+
+    const MAX_HEALTH: u16 = 3;
+    set_health(&mut new_data, MAX_HEALTH);
+
 
     Ok(())
 }

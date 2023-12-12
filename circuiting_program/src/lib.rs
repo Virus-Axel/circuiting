@@ -12,6 +12,8 @@ pub mod methods;
 use crate::methods::initialize_user::initialize_user;
 use crate::methods::spacecraft::create_spacecraft_account;
 
+pub const ID: &str = "2DzKRbWVuGgwiX4rAxQLbR5QzszGcmoKgSp7C1awzFsi";
+
 // Declare and export the program's entrypoint
 entrypoint!(process_instruction);
 

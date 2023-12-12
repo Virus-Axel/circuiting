@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://bj48061wno0py"]
+
+[ext_resource type="Script" path="res://ui/start.gd" id="1_kbnq6"]
+
+[node name="Start" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kbnq6")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 159.0
+offset_top = 230.0
+offset_right = 466.0
+offset_bottom = 450.0
+text = "Create Space Ship"
+
+[node name="PhantomController" type="PhantomController" parent="."]
+
+[connection signal="pressed" from="Button" to="." method="create_spaceship_transaction"]
+[connection signal="signing_error" from="PhantomController" to="." method="_on_phantom_controller_signing_error"]

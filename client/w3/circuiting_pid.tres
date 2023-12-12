@@ -1,0 +1,6 @@
+[gd_resource type="Pubkey" format=3 uid="uid://dueo3qvrjjtfg"]
+
+[resource]
+type = "CUSTOM"
+value = "2DzKRbWVuGgwiX4rAxQLbR5QzszGcmoKgSp7C1awzFsi"
+bytes = PackedByteArray(18, 47, 119, 70, 62, 47, 227, 186, 194, 144, 99, 73, 1, 56, 123, 139, 231, 126, 21, 137, 151, 236, 153, 4, 137, 56, 252, 213, 214, 9, 220, 221)
