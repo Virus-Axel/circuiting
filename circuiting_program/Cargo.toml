@@ -1,0 +1,17 @@
+[features]
+no-entrypoint = []
+
+[package]
+name = "circuiting_program"
+version = "0.1.0"
+edition = "2021"
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+solana-program = "1.17.8"
+
+[lib]
+name = "circuiting_program"
+crate-type = ["cdylib", "lib"]
