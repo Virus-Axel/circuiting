@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dby64sa6h4g33"]
+
+[ext_resource type="Script" path="res://w3/w3.gd" id="1_cswaj"]
+
+[node name="w3" type="Node"]
+script = ExtResource("1_cswaj")
+
+[node name="PhantomController" type="PhantomController" parent="."]

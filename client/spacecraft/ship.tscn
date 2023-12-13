@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://csitvu1eis5rf"]
+
+[ext_resource type="PackedScene" uid="uid://cxku8x14x76l0" path="res://spacecraft/board.blend" id="1_7rdmo"]
+[ext_resource type="Script" path="res://spacecraft/ship.gd" id="1_51yfy"]
+[ext_resource type="PackedScene" uid="uid://dva37da8xcja" path="res://ui/toolbox.tscn" id="3_h1tpo"]
+[ext_resource type="Script" path="res://spacecraft/pcb_ghosts.gd" id="4_vn31s"]
+[ext_resource type="Script" path="res://spacecraft/Cursor.gd" id="5_ocpcs"]
+
+[node name="Ship" type="Node3D"]
+script = ExtResource("1_51yfy")
+
+[node name="board" parent="." instance=ExtResource("1_7rdmo")]
+visible = false
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, -4.88272, 15.0795, -11.1285)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.00771427, 0.99997, 0, -0.99997, 0.00771427, 0, 5.47776, 0)
+
+[node name="BuildCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 8, 0)
+projection = 1
+
+[node name="Control" parent="." instance=ExtResource("3_h1tpo")]
+
+[node name="pcb_ghosts" type="Node3D" parent="."]
+script = ExtResource("4_vn31s")
+
+[node name="pieces" type="Node3D" parent="."]
+
+[node name="Components" type="Node3D" parent="."]
+
+[node name="Cursor" type="Node3D" parent="."]
+visible = false
+script = ExtResource("5_ocpcs")
+
+[connection signal="grab_component" from="Control" to="Cursor" method="_on_control_grab_component"]

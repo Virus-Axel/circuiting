@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="circuiting"
-run/main_scene="res://ui/start.tscn"
+run/main_scene="res://spacecraft/ship.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+w3="*res://w3/w3.tscn"
 
 [rendering]
 

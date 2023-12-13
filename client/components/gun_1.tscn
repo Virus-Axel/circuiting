@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8ohnjx3tbnw5"]
+
+[ext_resource type="PackedScene" uid="uid://3xgl7i40oylv" path="res://components/component.blend" id="1_4mu0j"]
+[ext_resource type="Script" path="res://components/gun_1.gd" id="1_kqilt"]
+
+[node name="Gun1" type="Node3D"]
+script = ExtResource("1_kqilt")
+
+[node name="component" parent="." instance=ExtResource("1_4mu0j")]

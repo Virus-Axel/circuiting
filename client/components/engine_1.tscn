@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbewioijbur8e"]
+
+[ext_resource type="PackedScene" uid="uid://lr1hdxoim1ym" path="res://components/jet_01.blend" id="1_lin8y"]
+
+[node name="Engine1" type="Node3D"]
+
+[node name="jet_01" parent="." instance=ExtResource("1_lin8y")]

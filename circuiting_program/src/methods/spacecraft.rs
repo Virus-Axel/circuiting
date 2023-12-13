@@ -29,6 +29,16 @@ fn set_health(data: &mut [u8], health :u16){
     data[OWNER_SIZE..(OWNER_SIZE + HEALTH_SIZE)].copy_from_slice(&health.to_le_bytes());
 }
 
+fn set_pcb_array_element(data: &mut [u8], x: u8, y: u8, value: u8){
+    const ARRAY_OFFSET: usize = OWNER_SIZE + HEALTH_SIZE + SPEED_SIZE + LOCATION_SIZE;
+    data[ARRAY_OFFSET + (y as usize) * (MAX_BOARD_WIDTH as usize) + (x as usize)] = value;
+}
+
+fn get_pcb_array_element(data: &[u8], x: u8, y: u8) -> u8{
+    const ARRAY_OFFSET: usize = OWNER_SIZE + HEALTH_SIZE + SPEED_SIZE + LOCATION_SIZE;
+    data[ARRAY_OFFSET + (y as usize) * (MAX_BOARD_WIDTH as usize) + (x as usize)]
+}
+
 pub fn create_spacecraft_account<'a>(
     accounts: &'a [AccountInfo<'a>],
 ) -> ProgramResult {
@@ -52,6 +62,9 @@ pub fn create_spacecraft_account<'a>(
     const MAX_HEALTH: u16 = 3;
     set_health(&mut new_data, MAX_HEALTH);
 
+    set_pcb_array_element(&mut new_data, MAX_BOARD_WIDTH / 2, 0, 1);
+    set_pcb_array_element(&mut new_data, MAX_BOARD_WIDTH / 2, 1, 1);
+    set_pcb_array_element(&mut new_data, MAX_BOARD_WIDTH / 2, 2, 1);
 
     Ok(())
 }
