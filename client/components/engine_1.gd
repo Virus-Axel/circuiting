@@ -1,13 +1,12 @@
 extends Node3D
 
-
-const RANGE = 0.4
-const ANIMATION_TIME = 1.0
-const SLEEP_TIME = 0.5
-var animation_time = 0.0
-var direction: float
+var engine_mode = 0
 
 signal meta_changed(grid_pos, new_data)
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
 
 func notify_activation():
 	print("trying to activate engine")
@@ -16,10 +15,19 @@ func confirm_activation():
 	print("Engine activation confirmed")
 	
 func finalize_activation():
+	if engine_mode == 1:
+		engine_mode = 0
+	else:
+		engine_mode = 1
 	print("Engine activation complete")
+	emit_signal("meta_changed", Vector2i(position.x, -position.z) / 2, engine_mode)
 	
 func abort_activation():
 	print("Engine activation failed")
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
 
 func activate():
 	var tx: Transaction = w3.activate_component_transaction(Vector2i(position.x, -position.y) / 2)
@@ -42,25 +50,3 @@ func _on_static_body_3d_input_event(camera, event, position, normal, shape_idx):
 		print("clicked")
 		print(self.position)
 		activate()
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	animation_time = randf_range(0.0, ANIMATION_TIME * 2 + SLEEP_TIME * 2)
-	direction = randf()*PI*2.0
-	rotation.y = direction
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	animation_time += delta
-	if animation_time < ANIMATION_TIME:
-		rotation.y = direction + RANGE * animation_time
-	elif animation_time > ANIMATION_TIME * 2 + 2 * SLEEP_TIME:
-		animation_time = 0.0
-	elif animation_time > ANIMATION_TIME * 2 + SLEEP_TIME:
-		pass
-	elif animation_time > ANIMATION_TIME + SLEEP_TIME:
-		rotation.y = direction + RANGE * (1.0 - (animation_time - ANIMATION_TIME - SLEEP_TIME))
-	
-	pass

@@ -12,6 +12,7 @@ const ACCOUNT_STORAGE_OVERHEAD: int = 128
 const DEFAULT_EXEMPTION_THRESHOLD: float = 2.0
 const MAX_BOARD_HEIGHT = 128
 const MAX_BOARD_WIDTH = 64
+const DATA_SIZE_PER_UNIT = 3
 
 signal play_key_derived(keypair, account)
 
@@ -88,6 +89,34 @@ func create_spaceship_transaction():
 	return tx
 
 
+func activate_component_transaction(pos: Vector2i):
+	var tx = Transaction.new()
+	tx.set_payer(play_keypair)
+	var instruction = Instruction.new()
+	
+	# ID
+	instruction.program_id = Pubkey.new_from_string(PID)
+	
+	# Accounts
+	var accounts := []
+	accounts.push_back(new_account_meta(play_keypair, true, true))
+	accounts.push_back(new_account_meta(play_account, true, true))
+
+	instruction.set_accounts(accounts)
+
+	# Data
+	var data := PackedByteArray([3, pos.x, pos.y])
+	instruction.set_data(data)
+	
+	tx.add_instruction(instruction)
+	
+	print(tx.serialize())
+	tx.update_latest_blockhash("")
+	tx.sign_and_send()
+	print("wllewleel")
+	
+	return tx
+
 func send_commit_transaction(actions: Array):
 	var tx = Transaction.new()
 	tx.set_payer(play_keypair)
@@ -121,6 +150,7 @@ func send_commit_transaction(actions: Array):
 	tx.sign_and_send()
 
 	return tx
+
 
 func get_derived_keypair() -> Keypair:
 	#return Keypair.new_from_seed(Pubkey.new_from_string(PID).get_bytes())

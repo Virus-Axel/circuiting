@@ -17,6 +17,8 @@ const MAX_BOARD_WIDTH: u8 = 64;
 const MAX_BOARD_HEIGHT: u8 = 128;
 const DATA_SIZE_PER_UNIT: u8 = 3; // Component type, input 1, component specific data,
 
+const ARRAY_OFFSET: usize = OWNER_SIZE + HEALTH_SIZE + SPEED_SIZE + LOCATION_SIZE;
+
 fn spacecraft_account_size() -> usize {
     (MAX_BOARD_HEIGHT as usize) * (MAX_BOARD_WIDTH as usize) * (DATA_SIZE_PER_UNIT as usize)
         + LOCATION_SIZE
@@ -25,18 +27,28 @@ fn spacecraft_account_size() -> usize {
         + OWNER_SIZE
 }
 
+fn toggle_engine_at(data: &mut [u8], x: u8, y: u8) -> ProgramResult{
+    let existing_value = data[ARRAY_OFFSET + ((y as usize) * (MAX_BOARD_WIDTH as usize) + (x as usize)) * (DATA_SIZE_PER_UNIT as usize) + 2];
+    if existing_value == 1{
+        data[ARRAY_OFFSET + ((y as usize) * (MAX_BOARD_WIDTH as usize) + (x as usize)) * (DATA_SIZE_PER_UNIT as usize) + 2] = 0;
+    }
+    else{
+        data[ARRAY_OFFSET + ((y as usize) * (MAX_BOARD_WIDTH as usize) + (x as usize)) * (DATA_SIZE_PER_UNIT as usize) + 2] = 1;
+    }
+
+    Ok(())
+}
+
 fn set_health(data: &mut [u8], health :u16){
     data[OWNER_SIZE..(OWNER_SIZE + HEALTH_SIZE)].copy_from_slice(&health.to_le_bytes());
 }
 
 fn set_pcb_array_element(data: &mut [u8], x: u8, y: u8, value: u8){
-    const ARRAY_OFFSET: usize = OWNER_SIZE + HEALTH_SIZE + SPEED_SIZE + LOCATION_SIZE;
-    data[ARRAY_OFFSET + (y as usize) * (MAX_BOARD_WIDTH as usize) + (x as usize)] = value;
+    data[ARRAY_OFFSET + ((y as usize) * (MAX_BOARD_WIDTH as usize) + (x as usize)) * (DATA_SIZE_PER_UNIT as usize)] = value;
 }
 
 fn get_pcb_array_element(data: &[u8], x: u8, y: u8) -> u8{
-    const ARRAY_OFFSET: usize = OWNER_SIZE + HEALTH_SIZE + SPEED_SIZE + LOCATION_SIZE;
-    data[ARRAY_OFFSET + (y as usize) * (MAX_BOARD_WIDTH as usize) + (x as usize)]
+    data[ARRAY_OFFSET + ((y as usize) * (MAX_BOARD_WIDTH as usize) + (x as usize)) * (DATA_SIZE_PER_UNIT as usize)]
 }
 
 pub fn create_spacecraft_account<'a>(
@@ -57,6 +69,12 @@ pub fn create_spacecraft_account<'a>(
     }
 
     let mut new_data = new_account.try_borrow_mut_data().unwrap();
+
+    // TODO(Virax): Remove when not testing stuff.
+    for i in 0..(new_data.len()){
+        new_data[i] = 0;
+    }
+
     new_data[0..32].copy_from_slice(&payer_account.key.to_bytes());
 
     const MAX_HEALTH: u16 = 3;
@@ -137,10 +155,10 @@ pub fn activate_component<'a>(accounts: &'a [AccountInfo<'a>], instruction_data:
     
     let mut data = play_account.try_borrow_mut_data().unwrap();
 
-    let existing_component = get_pcb_array_element(&mut data, instruction_data[1], instruction_data[2]);
+    let existing_component = get_pcb_array_element(&data, instruction_data[1], instruction_data[2]);
     match existing_component{
         //2 => 
-        //3 => add_velocity(),
+        3 => toggle_engine_at(&mut data, instruction_data[1], instruction_data[2]),
         _ => Err(ProgramError::InvalidInstructionData),
     }?;
 

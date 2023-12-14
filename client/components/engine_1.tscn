@@ -1,7 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://cbewioijbur8e"]
+[gd_scene load_steps=4 format=3 uid="uid://cbewioijbur8e"]
 
+[ext_resource type="Script" path="res://components/engine_1.gd" id="1_jjr4v"]
 [ext_resource type="PackedScene" uid="uid://lr1hdxoim1ym" path="res://components/jet_01.blend" id="1_lin8y"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_pfmhh"]
+
 [node name="Engine1" type="Node3D"]
+script = ExtResource("1_jjr4v")
 
 [node name="jet_01" parent="." instance=ExtResource("1_lin8y")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+shape = SubResource("BoxShape3D_pfmhh")
+
+[connection signal="input_event" from="StaticBody3D" to="." method="_on_static_body_3d_input_event"]

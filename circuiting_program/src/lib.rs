@@ -1,3 +1,4 @@
+use methods::spacecraft::activate_component;
 use solana_program::{
     account_info::AccountInfo,
     entrypoint,
@@ -27,6 +28,8 @@ pub fn process_instruction<'a>(
     match instruction_data[0] {
         0 => create_spacecraft_account(accounts),
         1 => add_component(accounts, instruction_data),
-        _ => Ok(()),
+
+        3 => activate_component(accounts, instruction_data),
+        _ => Err(ProgramError::InvalidInstructionData),
     }
 }

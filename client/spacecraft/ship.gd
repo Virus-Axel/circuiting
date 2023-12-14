@@ -7,6 +7,8 @@ var highest_x: Vector3
 var center: Vector3
 
 var pcb_array = []
+var pcb_meta = []
+
 var max_health = 0
 var owner_pubkey: Pubkey
 var velocity: Vector2
@@ -24,6 +26,7 @@ const component_list = [
 
 
 func get_mass_center() -> Vector2:
+	MplTokenMetadata
 	var amount := 0
 	var mass_total := Vector2i(0, 0)
 	for x in range(MAX_BOARD_WIDTH):
@@ -35,8 +38,9 @@ func get_mass_center() -> Vector2:
 	return Vector2(mass_total) / amount
 
 func get_force_from_pos(pos: Vector2i) -> Vector2:
-	if pcb_array[pos.y * MAX_BOARD_WIDTH + pos.x] == 3:
-		return Vector2(0.0, 1.0)
+	if pcb_array[(pos.y * MAX_BOARD_WIDTH + pos.x)] == 3:
+		var is_engine_on = pcb_meta[(pos.y * MAX_BOARD_WIDTH + pos.x)]
+		return Vector2(0.0, 1.0) * is_engine_on
 	else:
 		return Vector2()
 
@@ -176,11 +180,14 @@ func load_from_account(key):
 	
 	for x in range(MAX_BOARD_WIDTH):
 		for y in range(MAX_BOARD_HEIGHT):
-			set_piece(Vector2i(x, y), account_data[ARRAY_START + y * MAX_BOARD_WIDTH + x])
+			set_piece(Vector2i(x, y), account_data[ARRAY_START + (y * MAX_BOARD_WIDTH + x) * w3.DATA_SIZE_PER_UNIT])
+			pcb_meta[y * w3.MAX_BOARD_WIDTH + x] = account_data[ARRAY_START + (y * MAX_BOARD_WIDTH + x) * w3.DATA_SIZE_PER_UNIT + 2]
 
 	var mc = get_mass_center()
 	set_board_pivot(Vector3(mc.x * 2.0, 0.0, -mc.y * 2.0))
 
+func set_component_meta(pos: Vector2i, new_meta):
+	pcb_meta[(pos.y * w3.MAX_BOARD_WIDTH + pos.x)] = new_meta
 
 func set_piece(pos: Vector2i, type: int):
 	if type != 0:
@@ -212,6 +219,7 @@ func set_piece(pos: Vector2i, type: int):
 		
 		piece.position = Vector3(float(pos.x) * 2.0, 0.0, -float(pos.y) * 2.0)
 		$Components.add_child(piece)
+		piece.connect("meta_changed", Callable(self, "set_component_meta"))
 		
 	
 	pcb_array[pos.y * MAX_BOARD_WIDTH + pos.x] = type
@@ -230,6 +238,7 @@ func _ready():
 	$BuildCamera.size *= 10.0
 	#$BuildCamera.position.x = MAX_BOARD_WIDTH
 	pcb_array.resize(MAX_BOARD_WIDTH * MAX_BOARD_HEIGHT)
+	pcb_meta.resize(MAX_BOARD_WIDTH * MAX_BOARD_HEIGHT)
 	#SolanaClient.set_url("http://127.0.0.1:8899")
 	#SolanaClient.set_encoding("base64")
 
@@ -240,9 +249,6 @@ func _ready():
 	#activate_ghost_pcb()
 	#activate_edge_pcb()
 	#toggle_build_mode()
-
-func rotate_ship(angle: float):
-	rotation.y += angle
 
 
 func _process(delta):
