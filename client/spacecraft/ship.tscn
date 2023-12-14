@@ -10,7 +10,6 @@
 script = ExtResource("1_51yfy")
 
 [node name="board" parent="." instance=ExtResource("1_7rdmo")]
-visible = false
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, -4.88272, 15.0795, -11.1285)
@@ -35,4 +34,12 @@ script = ExtResource("4_vn31s")
 visible = false
 script = ExtResource("5_ocpcs")
 
+[connection signal="any_item_selected" from="Control" to="." method="activate_free_slots"]
+[connection signal="edge_item_selected" from="Control" to="." method="activate_edge_pcb"]
 [connection signal="grab_component" from="Control" to="Cursor" method="_on_control_grab_component"]
+[connection signal="mode_toggled" from="Control" to="." method="toggle_build_mode"]
+[connection signal="pcb_item_selected" from="Control" to="." method="activate_ghost_pcb"]
+[connection signal="cursor_changed" from="Cursor" to="." method="_on_cursor_cursor_changed"]
+[connection signal="disabled" from="Cursor" to="pcb_ghosts" method="clear_markers"]
+[connection signal="placed_component" from="Cursor" to="." method="set_piece"]
+[connection signal="placed_component" from="Cursor" to="Control" method="store_action"]

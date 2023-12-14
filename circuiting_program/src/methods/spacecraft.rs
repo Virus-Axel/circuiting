@@ -89,8 +89,13 @@ pub fn add_component<'a>(
     let accounts_iter = &mut accounts.iter();
 
     // Get the accounts
-    let sender_account = next_account_info(accounts_iter)?;
-    let mapping_account = next_account_info(accounts_iter)?;
+    let _sender_account = next_account_info(accounts_iter)?;
+    let play_account = next_account_info(accounts_iter)?;
+
+    // TODO(Virax): burn a token here.
+    
+    let mut data = play_account.try_borrow_mut_data().unwrap();
+    set_pcb_array_element(&mut data, instruction_data[1], instruction_data[2], instruction_data[3]);
 
     Ok(())
 }
@@ -102,18 +107,42 @@ pub fn remove_component<'a>(
     let accounts_iter = &mut accounts.iter();
 
     // Get the accounts
-    let sender_account = next_account_info(accounts_iter)?;
-    let mapping_account = next_account_info(accounts_iter)?;
+    let _sender_account = next_account_info(accounts_iter)?;
+    let play_account = next_account_info(accounts_iter)?;
+
+    // TODO(Virax): return a token here.
+    
+    let mut data = play_account.try_borrow_mut_data().unwrap();
+
+    let existing_component = get_pcb_array_element(&mut data, instruction_data[1], instruction_data[2]);
+    if existing_component > 1{
+        set_pcb_array_element(&mut data, instruction_data[1], instruction_data[2], 1);
+    }
+    else if existing_component == 1{
+        set_pcb_array_element(&mut data, instruction_data[1], instruction_data[2], 0);
+    }
+    else{
+        return Err(ProgramError::InvalidInstructionData);
+    }
 
     Ok(())
 }
 
-pub fn travel<'a>(accounts: &'a [AccountInfo<'a>], instruction_data: &[u8]) -> ProgramResult {
+pub fn activate_component<'a>(accounts: &'a [AccountInfo<'a>], instruction_data: &[u8]) -> ProgramResult {
     let accounts_iter = &mut accounts.iter();
 
     // Get the accounts
-    let sender_account = next_account_info(accounts_iter)?;
-    let mapping_account = next_account_info(accounts_iter)?;
+    let _sender_account = next_account_info(accounts_iter)?;
+    let play_account = next_account_info(accounts_iter)?;
+    
+    let mut data = play_account.try_borrow_mut_data().unwrap();
+
+    let existing_component = get_pcb_array_element(&mut data, instruction_data[1], instruction_data[2]);
+    match existing_component{
+        //2 => 
+        //3 => add_velocity(),
+        _ => Err(ProgramError::InvalidInstructionData),
+    }?;
 
     Ok(())
 }

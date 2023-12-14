@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://dau3mw8h404k8"]
+
+[ext_resource type="Script" path="res://garage/garage.gd" id="1_3c2k8"]
+[ext_resource type="PackedScene" uid="uid://csitvu1eis5rf" path="res://spacecraft/ship.tscn" id="2_rkwny"]
+
+[node name="Garage" type="Node3D"]
+script = ExtResource("1_3c2k8")
+
+[node name="Ship" parent="." instance=ExtResource("2_rkwny")]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 4, -2, 15)
+size = Vector3(20, 20, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.224144, -0.5, 0.836516, -0.12941, 0.866025, 0.482963, -0.965926, 0, -0.258819, -3, -5, 0)
+size = Vector3(20, 20, 1)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(0.724444, -0.25, 0.642402, -0.12941, 0.866025, 0.482963, -0.677077, -0.433013, 0.595035, -7, -1, -12)
+size = Vector3(20, 20, 1)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+transform = Transform3D(0.677077, 0.433013, -0.595035, -0.12941, 0.866025, 0.482963, 0.724444, -0.25, 0.642402, 6, 2, -9)
+size = Vector3(20, 20, 1)

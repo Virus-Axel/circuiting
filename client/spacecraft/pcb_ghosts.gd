@@ -11,7 +11,7 @@ func are_points_close_enough(point_a, point_b, threshold: float) -> bool:
 
 func is_position_marked(pos: Vector2i):
 	for child in get_children():
-		if are_points_close_enough(Vector2(pos * 2), child.position, 0.01):
+		if are_points_close_enough(Vector2(pos.x * 2, -pos.y * 2), Vector2(child.position.x, child.position.z), 0.01):
 			return true;
 			
 	return false;

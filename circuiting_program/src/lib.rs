@@ -11,6 +11,7 @@ pub mod methods;
 
 use crate::methods::initialize_user::initialize_user;
 use crate::methods::spacecraft::create_spacecraft_account;
+use crate::methods::spacecraft::add_component;
 
 pub const ID: &str = "2DzKRbWVuGgwiX4rAxQLbR5QzszGcmoKgSp7C1awzFsi";
 
@@ -25,6 +26,7 @@ pub fn process_instruction<'a>(
 
     match instruction_data[0] {
         0 => create_spacecraft_account(accounts),
+        1 => add_component(accounts, instruction_data),
         _ => Ok(()),
     }
 }

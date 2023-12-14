@@ -11,6 +11,8 @@ var max_health = 0
 var owner_pubkey: Pubkey
 var velocity: Vector2
 var location: Vector2
+var exploding = false
+var explode_amount = 1.0
 
 const MAX_BOARD_HEIGHT = 128
 const MAX_BOARD_WIDTH = 64
@@ -20,10 +22,44 @@ const component_list = [
 	preload("res://components/engine_1.tscn"),
 ]
 
+
+func get_mass_center() -> Vector2:
+	var amount := 0
+	var mass_total := Vector2i(0, 0)
+	for x in range(MAX_BOARD_WIDTH):
+		for y in range(MAX_BOARD_HEIGHT):
+			if pcb_array[y * MAX_BOARD_WIDTH + x] != 0:
+				amount += 1
+				mass_total += Vector2i(x, y)
+	
+	return Vector2(mass_total) / amount
+
+func get_force_from_pos(pos: Vector2i) -> Vector2:
+	if pcb_array[pos.y * MAX_BOARD_WIDTH + pos.x] == 3:
+		return Vector2(0.0, 1.0)
+	else:
+		return Vector2()
+
+func get_velocity() -> Vector2:
+	var result_force = Vector2(0.0, 0.0)
+	var mass_center = get_mass_center()
+
+	for x in range(MAX_BOARD_WIDTH):
+		for y in range(MAX_BOARD_HEIGHT):
+			if pcb_array[y * MAX_BOARD_WIDTH + x] == 3:
+				var engine_force = get_force_from_pos(Vector2i(x, y))
+				var angle_to_centrum = (mass_center - Vector2(x, y)).angle()
+				var rotational_force = engine_force.length() * cos(angle_to_centrum)
+				var velocity_force = engine_force.length() * sin(angle_to_centrum)
+				result_force += Vector2(rotational_force, velocity_force)
+	
+	return result_force
+				
+
 func set_pcb_marker(pos: Vector2i):
 	if pos.x < MAX_BOARD_WIDTH and pos.x >= 0 and pos.y < MAX_BOARD_HEIGHT and pos.y >= 0:
 		var marker = $board.get_node("marker").duplicate()
-		marker.position = Vector3(float(pos.x) * 2.0, 1.0, -float(pos.y) * 2.0)
+		marker.position = Vector3(float(pos.x - MAX_BOARD_WIDTH / 2) * 2.0, 1.0, -float(pos.y) * 2.0)
 		$pcb_ghosts.add_child(marker)
 
 
@@ -57,10 +93,19 @@ func activate_edge_pcb():
 			if (pcb_array[y * MAX_BOARD_WIDTH + x] != 0 and pcb_array[(y + 1) * MAX_BOARD_WIDTH + x] == 0) or (pcb_array[y * MAX_BOARD_WIDTH + x] != 0 and pcb_array[(y - 1) * MAX_BOARD_WIDTH + x] == 0) or (pcb_array[y * MAX_BOARD_WIDTH + x] != 0 and pcb_array[y * MAX_BOARD_WIDTH + x + 1] == 0) or (pcb_array[y * MAX_BOARD_WIDTH + x] != 0 and pcb_array[y * MAX_BOARD_WIDTH + x - 1] == 0):
 				set_pcb_marker(Vector2i(x, y))
 
+func set_board_pivot(pivot: Vector3):
+	$pieces.position = -pivot
+	$Components.position = -pivot
+
 func toggle_build_mode():
 	if $Camera3D.current:
 		$BuildCamera.make_current()
+		set_board_pivot(Vector3(64.0, 0.0, 0.0))
+		
 	else:
+		var mc = get_mass_center()
+		set_board_pivot(Vector3(mc.x * 2.0, 0.0, -mc.y * 2.0))
+		set_board_pivot(Vector3(64.0, 0.0, 0.0))
 		$Camera3D.make_current()
 
 func speed_from_byte(input_byte) -> Vector2:
@@ -104,8 +149,7 @@ func adjust_camera(delta):
 		if top_speed > 3.0:
 			$Camera3D.position.z -= 10.0 * delta
 
-
-	$Camera3D.position.x = center.x
+	$Camera3D.position.x = 0#center.x
 
 func load_from_account(key):
 	var account_info_result = SolanaClient.get_account_info(key)
@@ -133,6 +177,9 @@ func load_from_account(key):
 	for x in range(MAX_BOARD_WIDTH):
 		for y in range(MAX_BOARD_HEIGHT):
 			set_piece(Vector2i(x, y), account_data[ARRAY_START + y * MAX_BOARD_WIDTH + x])
+
+	var mc = get_mass_center()
+	set_board_pivot(Vector3(mc.x * 2.0, 0.0, -mc.y * 2.0))
 
 
 func set_piece(pos: Vector2i, type: int):
@@ -170,24 +217,60 @@ func set_piece(pos: Vector2i, type: int):
 	pcb_array[pos.y * MAX_BOARD_WIDTH + pos.x] = type
 	
 
-# Called when the node enters the scene tree for the first time.
+func explode(mag):
+	for item in $pieces.get_children():
+		item.position += Vector3(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * mag
+		item.rotation += Vector3(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * mag
+	for item in $Components.get_children():
+		item.position += Vector3(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * mag
+		item.rotation += Vector3(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * mag
+	
+
 func _ready():
 	$BuildCamera.size *= 10.0
-	$BuildCamera.position.x = MAX_BOARD_WIDTH
+	#$BuildCamera.position.x = MAX_BOARD_WIDTH
 	pcb_array.resize(MAX_BOARD_WIDTH * MAX_BOARD_HEIGHT)
-	SolanaClient.set_url("http://127.0.0.1:8899")
-	SolanaClient.set_encoding("base64")
+	#SolanaClient.set_url("http://127.0.0.1:8899")
+	#SolanaClient.set_encoding("base64")
 
-	load_from_account("2cn9FooLHGBNNDntbgxUW12YMQcpYMVgWBN1yJiTVhoP")
+	#load_from_account("2cn9FooLHGBNNDntbgxUW12YMQcpYMVgWBN1yJiTVhoP")
 	#set_pcb_marker(Vector2i(0, 0))
 	#set_pcb_marker(Vector2i(0, 1))
 	#set_pcb_marker(Vector2i(0, 2))
 	#activate_ghost_pcb()
-	activate_edge_pcb()
-	toggle_build_mode()
-	pass # Replace with function body.
+	#activate_edge_pcb()
+	#toggle_build_mode()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+func rotate_ship(angle: float):
+	rotation.y += angle
+
+
 func _process(delta):
-	adjust_camera(delta)
-	pass
+	var vel = get_velocity()
+
+	#$pieces.rotation.y -= vel.x * 0.1 * delta
+	#$Components.rotation.y = $pieces.rotation.y
+	
+	position.x -= sin(rotation.y) * vel.y * 5.9 * delta
+	position.z -= cos(rotation.y) * vel.y * 5.9 * delta
+	#position.z = $pieces.position.z
+	#$pieces.transform()
+
+	if exploding:
+		
+		rotation.y -= vel.x * 0.5 * delta
+		#$Components.rotation.y = $pieces.rotation.y
+		#explode(explode_amount)
+		#explode_amount += 0.08
+	else:
+		adjust_camera(delta)
+
+func _input(event):
+	if event.is_action_pressed("ui_accept"):
+		exploding = true
+
+func _on_cursor_cursor_changed(coordinate):
+	if $pcb_ghosts.is_position_marked(coordinate):
+		$Cursor.set_snap(true)
+	else:
+		$Cursor.set_snap(false)

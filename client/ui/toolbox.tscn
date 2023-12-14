@@ -16,31 +16,44 @@ grow_vertical = 2
 script = ExtResource("1_t24cx")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Commit" type="Button" parent="VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 expand_icon = true
 
 [node name="Button" type="Button" parent="VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 icon = ExtResource("1_3dr0a")
 expand_icon = true
 
 [node name="Button2" type="Button" parent="VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 icon = ExtResource("2_jjjaq")
 expand_icon = true
 
 [node name="Button3" type="Button" parent="VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 icon = ExtResource("2_yu5tu")
 expand_icon = true
 
+[node name="Button4" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+text = "Build"
+
 [connection signal="pressed" from="VBoxContainer/Commit" to="." method="commit_changes"]
 [connection signal="button_down" from="VBoxContainer/Button" to="." method="_on_button_button_down"]
+[connection signal="button_down" from="VBoxContainer/Button2" to="." method="_on_button_2_button_down"]
+[connection signal="button_down" from="VBoxContainer/Button3" to="." method="_on_button_3_button_down"]
+[connection signal="pressed" from="VBoxContainer/Button4" to="." method="toggle"]
