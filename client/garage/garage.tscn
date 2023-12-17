@@ -27,7 +27,6 @@ sky_material = SubResource("ShaderMaterial_qg07r")
 [sub_resource type="Environment" id="Environment_wsart"]
 background_mode = 2
 sky = SubResource("Sky_oicup")
-volumetric_fog_enabled = true
 
 [node name="Garage" type="Node3D"]
 script = ExtResource("1_3c2k8")
