@@ -33,7 +33,7 @@ const LOCATION_OFFSET: usize = OWNER_SIZE + HEALTH_SIZE + SPEED_SIZE;
 
 const ENEMY_DAMAGE_PER_SECOND: f64 = 1.0;
 
-const ROCKET_SPEED: f64 = 100.0;
+const ROCKET_SPEED: f64 = 90.0;
 
 fn update_timestamp(data: &mut [u8], timestamp: i64){
     data[TIMESTAMP_OFFSET..(TIMESTAMP_OFFSET+TIMESTAMP_SIZE)].copy_from_slice(&timestamp.to_le_bytes());
@@ -98,7 +98,7 @@ fn get_velocity(data: &[u8]) -> nalgebra::Vector2<f64>{
 }
 
 fn update_position_after_ms(data: &mut[u8], delta_time: i64, velocity: Vector2<f64>){
-    const ANGLE_PER_MS: f64 = 0.1;
+    const ANGLE_PER_MS: f64 = 0.3;
 
     let angle = f64::from_le_bytes(data[(LOCATION_OFFSET+16)..(LOCATION_OFFSET+24)].try_into().unwrap());
     let mut radius = 0.0;
@@ -342,7 +342,7 @@ pub fn create_spacecraft_account<'a>(
 
     new_data[0..32].copy_from_slice(&payer_account.key.to_bytes());
 
-    const MAX_HEALTH: u8 = 16;
+    const MAX_HEALTH: u8 = 32;
     set_max_health(&mut new_data, MAX_HEALTH);
     set_health(&mut new_data, MAX_HEALTH);
 
