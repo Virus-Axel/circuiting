@@ -1,6 +1,6 @@
 extends Node
 
-const PID := "2DzKRbWVuGgwiX4rAxQLbR5QzszGcmoKgSp7C1awzFsi"
+const PID := "J3hetoaLkMgw9fSp8BpvP2KDfuABnMp9fFzFPAa4E7QT"
 const SYSTEM_PID := "11111111111111111111111111111111"
 @onready var main_signer = $PhantomController
 var play_keypair: Keypair
