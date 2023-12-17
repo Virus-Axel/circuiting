@@ -17,6 +17,8 @@ func _on_button_pressed():
 		w3.load_play_keypair()
 		await w3.play_key_derived
 	
+	await w3.fund_broke_accounts()
+	
 	if not w3.does_account_exist(w3.play_account.get_public_value()):
 		var tx: Transaction = w3.create_spaceship_transaction()
 		while(not tx.is_confirmed()):
@@ -27,7 +29,7 @@ func _on_button_pressed():
 		#var tx = w3.create_spaceship_transaction()
 		#while not tx.is_finalized():
 		#	print("waiting for data cleanup")
-		#	await get_tree().create_timer(1.0).timeout
+	#		await get_tree().create_timer(1.0).timeout
 		
 	get_tree().change_scene_to_file("res://garage/garage.tscn")
 

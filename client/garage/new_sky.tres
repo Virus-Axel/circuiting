@@ -1,0 +1,10 @@
+[gd_resource type="Sky" load_steps=3 format=3 uid="uid://bosh7mlv85rn6"]
+
+[ext_resource type="Shader" path="res://garage/new_shader.gdshader" id="1_y0wuh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jsva7"]
+shader = ExtResource("1_y0wuh")
+
+[resource]
+sky_material = SubResource("ShaderMaterial_jsva7")
+radiance_size = 4

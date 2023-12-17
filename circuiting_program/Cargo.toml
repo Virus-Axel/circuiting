@@ -10,7 +10,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+nalgebra = "0.32.3"
 solana-program = "1.17.8"
+spl-token = { version = "4.0.0", features = ["no-entrypoint"] }
 
 [lib]
 name = "circuiting_program"

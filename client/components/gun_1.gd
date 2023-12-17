@@ -7,18 +7,37 @@ const SLEEP_TIME = 0.5
 var animation_time = 0.0
 var direction: float
 
+var activation_requested = false
+var activation_time = 0.0
+
+var enemy_ref
+
+const SCALE_INDICATION := 0.2
+const SCALE_FREQUENCY := 5.0
+
 signal meta_changed(grid_pos, new_data)
 
 func notify_activation():
-	print("trying to activate engine")
+	activation_requested = true
+	activation_time = 0.0
+	print("trying to activate gun")
 	
 func confirm_activation():
-	print("Engine activation confirmed")
+	print("gun activation confirmed")
 	
 func finalize_activation():
-	print("Engine activation complete")
+	$component.scale = Vector3(1.0, 1.0, 1.0)
+	activation_time = 0.0
+	activation_requested = false
+	rotation.y = 0.0
+	w3.emit_signal("shots_fired")
+	$component.get_node("AnimationPlayer").play("shoot")
+	$CSGCylinder3D.fire()
 	
 func abort_activation():
+	activation_time = 0.0
+	activation_requested = false
+	$component.scale = Vector3(1.0, 1.0, 1.0)
 	print("Engine activation failed")
 
 func activate():
@@ -62,5 +81,9 @@ func _process(delta):
 		pass
 	elif animation_time > ANIMATION_TIME + SLEEP_TIME:
 		rotation.y = direction + RANGE * (1.0 - (animation_time - ANIMATION_TIME - SLEEP_TIME))
+	
+	if activation_requested:
+		$component.scale = Vector3(1.0, 1.0, 1.0) +  Vector3(SCALE_INDICATION, SCALE_INDICATION, SCALE_INDICATION) * sin(activation_time * SCALE_FREQUENCY)
+		activation_time += delta
 	
 	pass

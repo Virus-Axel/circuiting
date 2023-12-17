@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://dj66ax3n3laab"]
+
+[ext_resource type="Script" path="res://present/present.gd" id="1_tx77y"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4ilj0"]
+transparency = 1
+albedo_color = Color(1, 0, 1, 0.27451)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jbhp3"]
+transparency = 1
+albedo_color = Color(1, 1, 0, 0.27451)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pirok"]
+transparency = 1
+albedo_color = Color(0, 1, 1, 0.27451)
+
+[node name="Present" type="Node3D"]
+script = ExtResource("1_tx77y")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(-1.25, 2.16506, 0, 1.08253, 0.625, -2.16506, -1.875, -1.08253, -1.25, 0, 0, 0)
+flip_faces = true
+material = SubResource("StandardMaterial3D_4ilj0")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(0.625, 1.08253, -2.16506, 2.16506, -1.25, 0, -1.08253, -1.875, -1.25, 0, 0, 0)
+flip_faces = true
+material = SubResource("StandardMaterial3D_jbhp3")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(-1.25, -1.875, -1.08253, 0, -1.25, 2.16506, -2.16506, 1.08253, 0.625, -0.00106943, 0, 0)
+flip_faces = true
+material = SubResource("StandardMaterial3D_pirok")

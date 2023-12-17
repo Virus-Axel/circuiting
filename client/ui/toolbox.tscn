@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://dva37da8xcja"]
+[gd_scene load_steps=7 format=3 uid="uid://dva37da8xcja"]
 
 [ext_resource type="Texture2D" uid="uid://cheijihu2opfl" path="res://ui/tool_icon_01.png" id="1_3dr0a"]
 [ext_resource type="Script" path="res://ui/toolbox.gd" id="1_t24cx"]
 [ext_resource type="Texture2D" uid="uid://drsuke5fc4fw0" path="res://ui/tool_icon_03.png" id="2_jjjaq"]
+[ext_resource type="Script" path="res://ui/VBoxContainer.gd" id="2_kbf2t"]
 [ext_resource type="Texture2D" uid="uid://c5r2x8lcfspaw" path="res://ui/tool_icon_02.png" id="2_yu5tu"]
+[ext_resource type="Texture2D" uid="uid://bv5nnfvnuowmc" path="res://ui/check.svg" id="3_p05xj"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -19,11 +21,14 @@ script = ExtResource("1_t24cx")
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("2_kbf2t")
 
 [node name="Commit" type="Button" parent="VBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+icon = ExtResource("3_p05xj")
+flat = true
 expand_icon = true
 
 [node name="Button" type="Button" parent="VBoxContainer"]
@@ -33,12 +38,28 @@ layout_mode = 2
 icon = ExtResource("1_3dr0a")
 expand_icon = true
 
+[node name="Label" type="Label" parent="VBoxContainer/Button"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 25
+text = "0"
+
 [node name="Button2" type="Button" parent="VBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 icon = ExtResource("2_jjjaq")
 expand_icon = true
+
+[node name="Label" type="Label" parent="VBoxContainer/Button2"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 23
+text = "0"
 
 [node name="Button3" type="Button" parent="VBoxContainer"]
 visible = false
@@ -47,13 +68,29 @@ layout_mode = 2
 icon = ExtResource("2_yu5tu")
 expand_icon = true
 
+[node name="Label" type="Label" parent="VBoxContainer/Button3"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 23
+text = "0"
+
 [node name="Button4" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
 text = "Build"
+flat = true
+
+[node name="BalanceUpdateTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
 
 [connection signal="pressed" from="VBoxContainer/Commit" to="." method="commit_changes"]
 [connection signal="button_down" from="VBoxContainer/Button" to="." method="_on_button_button_down"]
 [connection signal="button_down" from="VBoxContainer/Button2" to="." method="_on_button_2_button_down"]
 [connection signal="button_down" from="VBoxContainer/Button3" to="." method="_on_button_3_button_down"]
 [connection signal="pressed" from="VBoxContainer/Button4" to="." method="toggle"]
+[connection signal="timeout" from="BalanceUpdateTimer" to="VBoxContainer" method="_on_balance_update_timer_timeout"]

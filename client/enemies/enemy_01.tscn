@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://bicwc044ty82b"]
+
+[ext_resource type="Script" path="res://enemies/enemy_01.gd" id="1_b2rqt"]
+[ext_resource type="PackedScene" uid="uid://ciw8wil1qpdia" path="res://enemies/enemy.blend" id="2_rkls7"]
+[ext_resource type="Script" path="res://enemies/Node3D.gd" id="3_q0wfr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1qwjm"]
+emission_enabled = true
+emission = Color(1, 0.811765, 0.160784, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e05ly"]
+emission_enabled = true
+emission = Color(1, 0.811765, 0.160784, 1)
+
+[node name="Enemy01" type="Node3D"]
+script = ExtResource("1_b2rqt")
+
+[node name="update_goal_timer" type="Timer" parent="."]
+wait_time = 5.0
+
+[node name="enemy" parent="." instance=ExtResource("2_rkls7")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 4.57718, 1)
+
+[node name="Node3D" type="Node3D" parent="enemy"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, -1.09005, -0.25)
+script = ExtResource("3_q0wfr")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="enemy/Node3D"]
+transform = Transform3D(0.039956, 0.961347, 9.22475e-11, 0, -8.9604e-07, 0.045, 0.00187589, -20.4764, -1.96485e-09, 0.756991, 7, 23.225)
+material_override = SubResource("StandardMaterial3D_1qwjm")
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="enemy/Node3D"]
+transform = Transform3D(0.0299718, -0.888435, -1.13668e-10, 0, -8.9604e-07, 0.06, -0.00130021, -20.4797, -2.62022e-09, -0.688099, 7, 23.225)
+material_override = SubResource("StandardMaterial3D_e05ly")
+
+[node name="Timer" type="Timer" parent="enemy/Node3D"]
+wait_time = 0.3
+one_shot = true
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[node name="DeathTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[connection signal="timeout" from="update_goal_timer" to="." method="set_new_goal"]
+[connection signal="timeout" from="enemy/Node3D/Timer" to="enemy/Node3D" method="_on_timer_timeout"]
+[connection signal="timeout" from="ShootTimer" to="enemy/Node3D" method="beam"]

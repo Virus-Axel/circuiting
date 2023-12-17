@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://csitvu1eis5rf"]
+[gd_scene load_steps=8 format=3 uid="uid://csitvu1eis5rf"]
 
 [ext_resource type="PackedScene" uid="uid://cxku8x14x76l0" path="res://spacecraft/board.blend" id="1_7rdmo"]
 [ext_resource type="Script" path="res://spacecraft/ship.gd" id="1_51yfy"]
@@ -7,6 +7,9 @@
 [ext_resource type="Script" path="res://spacecraft/Components.gd" id="5_2ylft"]
 [ext_resource type="Script" path="res://spacecraft/Cursor.gd" id="5_ocpcs"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iylwj"]
+bg_color = Color(0.462745, 0.760784, 0, 1)
+
 [node name="Ship" type="Node3D"]
 script = ExtResource("1_51yfy")
 
@@ -14,7 +17,7 @@ script = ExtResource("1_51yfy")
 visible = false
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, -4.88272, 15.0795, -11.1285)
+transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, -4.883, 16, 8.872)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.00771427, 0.99997, 0, -0.99997, 0.00771427, 0, 5.47776, 0)
@@ -24,6 +27,12 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 8, 
 projection = 1
 
 [node name="Control" parent="." instance=ExtResource("3_h1tpo")]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = 0.0
+offset_bottom = 0.0
+grow_horizontal = 1
 
 [node name="pcb_ghosts" type="Node3D" parent="."]
 script = ExtResource("4_vn31s")
@@ -37,6 +46,28 @@ script = ExtResource("5_2ylft")
 visible = false
 script = ExtResource("5_ocpcs")
 
+[node name="SyncTimer" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[node name="DeathTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -231.0
+offset_top = 19.0
+offset_right = 232.0
+offset_bottom = 27.0
+grow_horizontal = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_iylwj")
+step = 1.0
+value = 8.0
+show_percentage = false
+
 [connection signal="any_item_selected" from="Control" to="." method="activate_free_slots"]
 [connection signal="edge_item_selected" from="Control" to="." method="activate_edge_pcb"]
 [connection signal="grab_component" from="Control" to="Cursor" method="_on_control_grab_component"]
@@ -46,3 +77,5 @@ script = ExtResource("5_ocpcs")
 [connection signal="disabled" from="Cursor" to="pcb_ghosts" method="clear_markers"]
 [connection signal="placed_component" from="Cursor" to="." method="set_piece"]
 [connection signal="placed_component" from="Cursor" to="Control" method="store_action"]
+[connection signal="timeout" from="SyncTimer" to="." method="_on_sync_timer_timeout"]
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]

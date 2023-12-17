@@ -1,10 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://dby64sa6h4g33"]
+[gd_scene load_steps=3 format=3 uid="uid://dby64sa6h4g33"]
 
 [ext_resource type="Script" path="res://w3/w3.gd" id="1_cswaj"]
+[ext_resource type="Script" path="res://w3/tokens.gd" id="2_rignm"]
 
 [node name="w3" type="Node"]
 script = ExtResource("1_cswaj")
 
 [node name="PhantomController" type="PhantomController" parent="."]
+
+[node name="tokens" type="Node" parent="."]
+script = ExtResource("2_rignm")
 
 [connection signal="signing_error" from="PhantomController" to="." method="_on_phantom_controller_signing_error"]

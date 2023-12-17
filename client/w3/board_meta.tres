@@ -1,0 +1,6 @@
+[gd_resource type="MetaData" format=3 uid="uid://cbm42gd200vlt"]
+
+[resource]
+name = "Board Piece"
+symbol = "CBP"
+uri = "https://raw.githubusercontent.com/Virus-Axel/circuiting/master/client/ui/tool_icon_01.png"

@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://c8ohnjx3tbnw5"]
+[gd_scene load_steps=5 format=3 uid="uid://c8ohnjx3tbnw5"]
 
 [ext_resource type="PackedScene" uid="uid://3xgl7i40oylv" path="res://components/component.blend" id="1_4mu0j"]
 [ext_resource type="Script" path="res://components/gun_1.gd" id="1_kqilt"]
+[ext_resource type="Script" path="res://components/CSGCylinder3D.gd" id="3_mmv5p"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_oq5xe"]
 
@@ -16,4 +17,14 @@ script = ExtResource("1_kqilt")
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1, 0)
 shape = SubResource("BoxShape3D_oq5xe")
 
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(0.05, 0, 0, 0, -1.74846e-06, 0.05, 0, -40, -2.18557e-09, 0, 2.11568, 43.4003)
+visible = false
+script = ExtResource("3_mmv5p")
+
+[node name="Timer" type="Timer" parent="CSGCylinder3D"]
+wait_time = 0.3
+one_shot = true
+
 [connection signal="input_event" from="StaticBody3D" to="." method="_on_static_body_3d_input_event"]
+[connection signal="timeout" from="CSGCylinder3D/Timer" to="CSGCylinder3D" method="_on_timer_timeout"]
