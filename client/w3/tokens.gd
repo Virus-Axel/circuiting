@@ -93,7 +93,6 @@ func create_token_accounts():
 	return tx
 
 func create_token_metadata():
-	var token_program = Pubkey.new_from_string("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
 	
 	var board_ata: Pubkey = get_board_token_account()
 	var engine_ata: Pubkey = get_engine_token_account()

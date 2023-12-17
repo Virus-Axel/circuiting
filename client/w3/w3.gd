@@ -7,7 +7,7 @@ var play_keypair: Keypair
 var play_account: Keypair
 var are_keys_derived := false
 
-const DEFAULT_LAMPORTS_PER_BYTE_YEAR: int = 1000000000 / 100 * 365 / (1024 * 1024)
+const DEFAULT_LAMPORTS_PER_BYTE_YEAR: int = int(1000000000 / 100) * 365 / (1024 * 1024)
 const ACCOUNT_STORAGE_OVERHEAD: int = 128
 const DEFAULT_EXEMPTION_THRESHOLD: float = 2.0
 const MAX_BOARD_HEIGHT = 32
@@ -69,7 +69,6 @@ func fund_broke_accounts():
 	var rpc_result = SolanaClient.get_balance(w3.play_keypair.get_public_value())
 	
 	var sig1: String = ""
-	var sig2: String = ""
 	var sig3: String = ""
 	
 	if rpc_result.has("result"):
@@ -141,8 +140,7 @@ func create_spaceship_transaction():
 	# Data
 	var data := PackedByteArray([0])
 	instruction.set_data(data)
-	
-	const DATA_SIZE = 1603
+
 	
 	#tx.add_instruction(SystemProgram.create_account(main_signer, play_account, minimum_balance_to_rent_extemption(DATA_SIZE), DATA_SIZE, Pubkey.new_from_string(PID)))
 	tx.add_instruction(instruction)
@@ -288,8 +286,6 @@ func send_commit_transaction(actions: Array):
 		# Data
 		var data := PackedByteArray([1, action[0].x, action[0].y, action[1]])
 		instruction.set_data(data)
-		
-		const DATA_SIZE = 24643
 		
 		tx.add_instruction(instruction)
 	
