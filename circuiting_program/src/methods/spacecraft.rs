@@ -324,9 +324,6 @@ pub fn create_spacecraft_account<'a>(
     let payer_account = next_account_info(accounts_iter)?;
     let new_account = next_account_info(accounts_iter)?;
 
-    let payer_lamports = payer_account.try_borrow_mut_lamports()?;
-    (&&payer_lamports) -= 10;
-
     let account_size = spacecraft_account_size();
     if new_account.data_len() != account_size{
         ;// TODO(Virax): enable before deploying.
