@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dau3mw8h404k8"]
+[gd_scene load_steps=13 format=3 uid="uid://dau3mw8h404k8"]
 
 [ext_resource type="Script" path="res://garage/garage.gd" id="1_3c2k8"]
 [ext_resource type="PackedScene" uid="uid://csitvu1eis5rf" path="res://spacecraft/ship.tscn" id="2_rkwny"]
@@ -6,6 +6,8 @@
 [ext_resource type="Shader" path="res://garage/new_shader.gdshader" id="4_0dpnp"]
 [ext_resource type="PackedScene" uid="uid://checll2ywpwuk" path="res://garage/planet.blend" id="5_n1jve"]
 [ext_resource type="Script" path="res://garage/rotations.gd" id="6_fsy3g"]
+[ext_resource type="AudioStream" uid="uid://bcmjnu2bne5w4" path="res://sounds/bg.mp3" id="7_wjygq"]
+[ext_resource type="AudioStream" uid="uid://bv2b6rt4lldl8" path="res://sounds/reward.wav" id="8_7rowx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ialwn"]
 shader = ExtResource("4_0dpnp")
@@ -135,6 +137,17 @@ theme_override_constants/outline_size = 8
 theme_override_constants/shadow_outline_size = 9
 theme_override_font_sizes/font_size = 37
 text = "Score:"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_wjygq")
+autoplay = true
+
+[node name="RewardSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_7rowx")
+volume_db = -1.045
+pitch_scale = 0.49
+
+[node name="presents" type="Node3D" parent="."]
 
 [connection signal="enemy_needs_revive" from="Ship" to="Enemies/Enemy01" method="revive"]
 [connection signal="needs_respawn" from="Ship" to="." method="_on_ship_needs_respawn"]

@@ -32,8 +32,8 @@ func does_account_exist(acc):
 	
 
 func _ready():
-	#SolanaClient.set_url("https://api.testnet.solana.com");
-	SolanaClient.set_url("http://127.0.0.1:8899");
+	SolanaClient.set_url("https://api.testnet.solana.com");
+	#SolanaClient.set_url("http://127.0.0.1:8899");
 	SolanaClient.set_encoding("base64")
 	
 	$PhantomController.connect_phantom()
@@ -73,7 +73,7 @@ func fund_broke_accounts():
 	var sig3: String = ""
 	
 	if rpc_result.has("result"):
-		if rpc_result["result"]["value"] < 1000000000:
+		if rpc_result["result"]["value"] < 500000000:
 			sig1 = request_ardrop(w3.play_keypair.get_public_value(), 1000000000)
 	
 	#rpc_result = SolanaClient.get_balance(w3.play_account.get_public_value())
@@ -85,7 +85,7 @@ func fund_broke_accounts():
 	rpc_result = SolanaClient.get_balance(SolanaSDK.bs58_encode(main_signer.get_connected_key()))
 
 	if rpc_result.has("result"):
-		if rpc_result["result"]["value"] < 1000000000:
+		if rpc_result["result"]["value"] < 500000000:
 			sig3 = request_ardrop(SolanaSDK.bs58_encode(main_signer.get_connected_key()), 1000000000)
 
 
@@ -114,7 +114,9 @@ func load_play_keypair():
 	does_account_exist(play_account.get_public_value())
 	
 	are_keys_derived = true
-	#$tokens.create_token_metadata()
+	
+	await fund_broke_accounts()
+	$tokens.create_token_accounts()
 
 	emit_signal("play_key_derived", play_keypair, play_account)
 

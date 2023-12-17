@@ -38,6 +38,7 @@ func _process(delta):
 func revive():
 	if dead and $DeathTimer.is_stopped():
 		dead = false
+		$ReviveSound.play()
 		$ShootTimer.start()
 		$enemy.get_node("AnimationPlayer").play("ArmatureAction")
 

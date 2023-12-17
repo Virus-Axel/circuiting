@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dva37da8xcja"]
+[gd_scene load_steps=8 format=3 uid="uid://dva37da8xcja"]
 
 [ext_resource type="Texture2D" uid="uid://cheijihu2opfl" path="res://ui/tool_icon_01.png" id="1_3dr0a"]
 [ext_resource type="Script" path="res://ui/toolbox.gd" id="1_t24cx"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://ui/VBoxContainer.gd" id="2_kbf2t"]
 [ext_resource type="Texture2D" uid="uid://c5r2x8lcfspaw" path="res://ui/tool_icon_02.png" id="2_yu5tu"]
 [ext_resource type="Texture2D" uid="uid://bv5nnfvnuowmc" path="res://ui/check.svg" id="3_p05xj"]
+[ext_resource type="AudioStream" uid="uid://cqbirc10wkmqh" path="res://sounds/attach.mp3" id="7_yip4h"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -87,6 +88,9 @@ flat = true
 [node name="BalanceUpdateTimer" type="Timer" parent="."]
 wait_time = 5.0
 autostart = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_yip4h")
 
 [connection signal="pressed" from="VBoxContainer/Commit" to="." method="commit_changes"]
 [connection signal="button_down" from="VBoxContainer/Button" to="." method="_on_button_button_down"]

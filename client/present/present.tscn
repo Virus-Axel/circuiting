@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dj66ax3n3laab"]
+[gd_scene load_steps=6 format=3 uid="uid://dj66ax3n3laab"]
 
 [ext_resource type="Script" path="res://present/present.gd" id="1_tx77y"]
+[ext_resource type="AudioStream" uid="uid://bv2b6rt4lldl8" path="res://sounds/reward.wav" id="2_8k3n1"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4ilj0"]
 transparency = 1
@@ -31,3 +32,8 @@ material = SubResource("StandardMaterial3D_jbhp3")
 transform = Transform3D(-1.25, -1.875, -1.08253, 0, -1.25, 2.16506, -2.16506, 1.08253, 0.625, -0.00106943, 0, 0)
 flip_faces = true
 material = SubResource("StandardMaterial3D_pirok")
+
+[node name="RewardSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_8k3n1")
+volume_db = -1.045
+pitch_scale = 0.49

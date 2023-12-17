@@ -3,6 +3,7 @@ extends Node3D
 const LASER_THICKNES := 0.4
 
 func beam():
+	$ShootSound.play()
 	visible = true
 	$Timer.start()
 	

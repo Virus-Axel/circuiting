@@ -23,10 +23,12 @@ func confirm_activation():
 	print("Engine activation confirmed")
 
 func start_fire():
+	$RocketSound.play()
 	$jet_01.get_node("Cone").visible = true
 	$jet_01.get_node("Cone_001").visible = true
 
 func stop_fire():
+	$RocketSound.stop()
 	$jet_01.get_node("Cone").visible = false
 	$jet_01.get_node("Cone_001").visible = false
 
@@ -58,6 +60,7 @@ func _process(delta):
 	pass
 
 func activate():
+	$ClickSound.play()
 	var tx: Transaction = w3.activate_component_transaction(Vector2i(position.x, -position.y) / 2)
 	var finalized = false
 	notify_activation()

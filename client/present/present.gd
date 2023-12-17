@@ -30,12 +30,16 @@ func _process(delta):
 	$CSGBox3D3.rotation.x += ROTATION_SPEED * 2.0 * delta
 	$CSGBox3D3.rotation.y += ROTATION_SPEED * 3.0 * delta
 	
-	if visible and not fading and (player_ref.position - position).length() < 5.0:
-		emit_signal("should_claim")
-		fade()
+	if visible and not fading and (player_ref.position - position).length() < 10.0:
+		if(not fading):
+			$RewardSound.play()
+			emit_signal("should_claim")
+			fading == true
+			fade()
 		
 	if fading:
 		const FADE_SPEED := 1.1
+		print("FADE SPEED: ", fade_time * FADE_SPEED)
 		scale += Vector3(1.0, 1.0, 1.0) * FADE_SPEED * fade_time * 0.1
 		$CSGBox3D.material.albedo_color.a = max(0.0, 1.0 - fade_time * FADE_SPEED )
 		$CSGBox3D2.material.albedo_color.a = max(0.0, 1.0 - fade_time * FADE_SPEED )
@@ -48,5 +52,7 @@ func _process(delta):
 			$CSGBox3D3.material.albedo_color.a = 0.3
 			fading = false
 			fade_time = 0.0
+			#process_mode = Node.PROCESS_MODE_DISABLED
+			
 		
 	pass

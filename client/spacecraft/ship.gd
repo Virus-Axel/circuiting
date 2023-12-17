@@ -116,6 +116,7 @@ func set_board_pivot(pivot: Vector3):
 	$Components.position = -pivot
 
 func toggle_build_mode():
+	$ToggleSound.play()
 	if $Camera3D.current:
 		$BuildCamera.make_current()
 		set_board_pivot(Vector3(w3.MAX_BOARD_WIDTH, 0.0, 0.0))
@@ -198,6 +199,7 @@ func load_from_account(key):
 	var account_data = SolanaSDK.bs64_decode(encoded_account_data[0])
 	
 	print(account_data)
+	$AudioStreamPlayer.play()
 	
 	owner_pubkey = Pubkey.new_from_string(SolanaSDK.bs58_encode(account_data.slice(0, 32)))
 	max_health = account_data[32]
@@ -261,6 +263,8 @@ func set_piece(pos: Vector2i, type: int):
 func explode():
 	if exploding:
 		return
+		
+	$BreakSound.play()
 	var piece_size = $pieces.get_child_count()
 	explode_velocities_piece.resize(piece_size)
 	explode_rotations_piece.resize(piece_size)
@@ -352,6 +356,8 @@ func _on_sync_timer_timeout():
 	const TIME_UNTIL_PRESENTS := 121 
 	if timestamp - previous_timestamp > TIME_UNTIL_PRESENTS:
 		
+		previous_timestamp = timestamp
+		
 		var owner: PackedByteArray = data.slice(0, 32)
 		emit_signal("place_rewards", timestamp / TIME_UNTIL_PRESENTS, owner)
 	
@@ -359,11 +365,18 @@ func _on_sync_timer_timeout():
 		previous_position = Vector2(x, y)
 		previous_rotation = angle
 		
-		estimated_rotational_force = (angle - rotation.y) / $SyncTimer.wait_time
+		print("ANGLE   ", angle)
+		if absf(angle - rotation.y) > PI:
+			estimated_rotational_force = ((angle - PI*2.0) - rotation.y) / $SyncTimer.wait_time
+		else:
+			estimated_rotational_force = (angle - rotation.y) / $SyncTimer.wait_time
 		estimated_rocket_force = (Vector2(x, y) - Vector2(position.x, position.y)) / $SyncTimer.wait_time
 		previous_health = data[32]
 	else:
-		estimated_rotational_force = (angle - previous_rotation) / $SyncTimer.wait_time
+		if absf(angle - previous_rotation) > PI:
+			estimated_rotational_force = ((angle - PI*2.0) - previous_rotation) / $SyncTimer.wait_time
+		else:
+			estimated_rotational_force = (angle - previous_rotation) / $SyncTimer.wait_time
 		estimated_rocket_force = (Vector2(x, y) - previous_position) / $SyncTimer.wait_time
 		
 		previous_position = Vector2(x, y)

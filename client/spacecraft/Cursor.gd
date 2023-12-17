@@ -79,6 +79,7 @@ func _process(delta):
 
 
 func _on_control_grab_component(mesh, type):
+	$GrabSound.play()
 	cursor_mesh = mesh
 	component_type = type
 	add_child(cursor_mesh)

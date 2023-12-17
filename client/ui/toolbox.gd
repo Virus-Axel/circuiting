@@ -23,6 +23,7 @@ func _process(delta):
 	pass
 
 func store_action(pos: Vector2i, type: int):
+	$AudioStreamPlayer.play()
 	actions.append([pos, type])
 	print(actions)
 	

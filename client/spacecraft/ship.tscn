@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://csitvu1eis5rf"]
+[gd_scene load_steps=12 format=3 uid="uid://csitvu1eis5rf"]
 
 [ext_resource type="PackedScene" uid="uid://cxku8x14x76l0" path="res://spacecraft/board.blend" id="1_7rdmo"]
 [ext_resource type="Script" path="res://spacecraft/ship.gd" id="1_51yfy"]
@@ -6,6 +6,10 @@
 [ext_resource type="Script" path="res://spacecraft/pcb_ghosts.gd" id="4_vn31s"]
 [ext_resource type="Script" path="res://spacecraft/Components.gd" id="5_2ylft"]
 [ext_resource type="Script" path="res://spacecraft/Cursor.gd" id="5_ocpcs"]
+[ext_resource type="AudioStream" uid="uid://bvpxrod6mgca0" path="res://sounds/breaking.ogg" id="7_2srl7"]
+[ext_resource type="AudioStream" uid="uid://o5d44ebqhly8" path="res://sounds/grab.wav" id="7_8f88m"]
+[ext_resource type="AudioStream" uid="uid://kix1dro2wx7h" path="res://sounds/respawn.wav" id="8_mv31q"]
+[ext_resource type="AudioStream" uid="uid://b1fjrxuccmtrn" path="res://sounds/toggle.wav" id="10_e8c8a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iylwj"]
 bg_color = Color(0.462745, 0.760784, 0, 1)
@@ -46,6 +50,9 @@ script = ExtResource("5_2ylft")
 visible = false
 script = ExtResource("5_ocpcs")
 
+[node name="GrabSound" type="AudioStreamPlayer" parent="Cursor"]
+stream = ExtResource("7_8f88m")
+
 [node name="SyncTimer" type="Timer" parent="."]
 wait_time = 3.0
 autostart = true
@@ -67,6 +74,17 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_iylwj")
 step = 1.0
 value = 8.0
 show_percentage = false
+
+[node name="BreakSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_2srl7")
+volume_db = -2.36
+pitch_scale = 0.75
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_mv31q")
+
+[node name="ToggleSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_e8c8a")
 
 [connection signal="any_item_selected" from="Control" to="." method="activate_free_slots"]
 [connection signal="edge_item_selected" from="Control" to="." method="activate_edge_pcb"]

@@ -13,11 +13,12 @@ func keys_derived(play_key, play_acc):
 	print(play_acc.get_public_value())
 
 func _on_button_pressed():
+	$ToggleSound.play()
 	if not w3.are_keys_derived:
 		w3.load_play_keypair()
 		await w3.play_key_derived
 	
-	await w3.fund_broke_accounts()
+	#await w3.fund_broke_accounts()
 	
 	if not w3.does_account_exist(w3.play_account.get_public_value()):
 		var tx: Transaction = w3.create_spaceship_transaction()

@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cbewioijbur8e"]
+[gd_scene load_steps=6 format=3 uid="uid://cbewioijbur8e"]
 
 [ext_resource type="Script" path="res://components/engine_1.gd" id="1_jjr4v"]
 [ext_resource type="PackedScene" uid="uid://lr1hdxoim1ym" path="res://components/jet_01.blend" id="1_lin8y"]
+[ext_resource type="AudioStream" uid="uid://b501tvq27nxyx" path="res://sounds/click_component.wav" id="3_nk05j"]
+[ext_resource type="AudioStream" uid="uid://wnt5t25e5jdp" path="res://sounds/rocket2.wav" id="4_m6g6h"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pfmhh"]
 
@@ -24,6 +26,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.54813, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 shape = SubResource("BoxShape3D_pfmhh")
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_nk05j")
+
+[node name="RocketSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_m6g6h")
+volume_db = -5.073
+stream_paused = true
 
 [connection signal="input_event" from="StaticBody3D" to="." method="_on_static_body_3d_input_event"]
 

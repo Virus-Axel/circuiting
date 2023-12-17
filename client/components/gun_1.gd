@@ -27,9 +27,10 @@ func confirm_activation():
 	
 func finalize_activation():
 	$component.scale = Vector3(1.0, 1.0, 1.0)
+	$GunShot.play()
 	activation_time = 0.0
 	activation_requested = false
-	rotation.y = 0.0
+	rotation.y = -PI/2.0
 	w3.emit_signal("shots_fired")
 	$component.get_node("AnimationPlayer").play("shoot")
 	$CSGCylinder3D.fire()
@@ -41,6 +42,7 @@ func abort_activation():
 	print("Engine activation failed")
 
 func activate():
+	$ClickSound.play()
 	var tx: Transaction = w3.activate_component_transaction(Vector2i(position.x, -position.y) / 2)
 	var finalized = false
 	notify_activation()

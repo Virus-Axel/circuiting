@@ -1,6 +1,6 @@
 extends Node
 
-const SCORE_TOKEN: String = "Cwf2DPcZnpaaas1kuEJUkfdtE8VStVqAmAuq5nh2zwou"
+const SCORE_TOKEN: String = "G5MDzR4KxniYukFYfRnmG6izJMkpU7pMdcHAdLSXcASK"
 const BOARD_TOKEN: String = "Cwf2DPcZnpaaas1kuEJUkfdtE8VStVqAmAuq5nh2zwou"
 const ENGINE_TOKEN: String = "2Td3VGPtjYxzni2sgr5fXfCxhbcKjSfws3mLHLds2VYx"
 const GUN_TOKEN: String = "5q9GPwj1BZ7Eqh7TL2uMf4qGhvumj5mNX2bEAvXBx818"
@@ -54,23 +54,41 @@ func get_engine_token_account():
 func get_authority():
 	return Pubkey.new_pda([AUTHORITY_SEED], Pubkey.new_from_string(w3.PID))
 
+
 func create_token_accounts():
 	var token_program = Pubkey.new_from_string("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
 	
+	var score_ata: Pubkey = Pubkey.new_associated_token_address(w3.play_keypair, Pubkey.new_from_string(SCORE_TOKEN))
 	var board_ata: Pubkey = Pubkey.new_associated_token_address(w3.play_keypair, Pubkey.new_from_string(BOARD_TOKEN))
 	var engine_ata: Pubkey = Pubkey.new_associated_token_address(w3.play_keypair, Pubkey.new_from_string(ENGINE_TOKEN))
 	var gun_ata: Pubkey = Pubkey.new_associated_token_address(w3.play_keypair, Pubkey.new_from_string(GUN_TOKEN))
 	
 	var tx = Transaction.new()
-	tx.set_payer(w3.main_signer)
+	tx.set_payer(w3.play_keypair)
+
+	var do_something = false
 	
-	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, Pubkey.new_from_string(BOARD_TOKEN), token_program))
-	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, Pubkey.new_from_string(ENGINE_TOKEN), token_program))
-	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, Pubkey.new_from_string(GUN_TOKEN), token_program))
+	if not w3.does_account_exist(score_ata.get_value()):
+		do_something = true
+		tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, Pubkey.new_from_string(SCORE_TOKEN), token_program))
+	if not w3.does_account_exist(board_ata.get_value()):
+		do_something = true
+		tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, Pubkey.new_from_string(BOARD_TOKEN), token_program))
+	if not w3.does_account_exist(engine_ata.get_value()):
+		do_something = true
+		tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, Pubkey.new_from_string(ENGINE_TOKEN), token_program))
+	if not w3.does_account_exist(gun_ata.get_value()):
+		do_something = true
+		tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, Pubkey.new_from_string(GUN_TOKEN), token_program))
+
+	if not do_something:
+		print("TOKEN ACCS already done")
+		return
+	else:
+		print("SOME TOKEN ACCS NEEDS TO BE CREATED")
 
 	tx.update_latest_blockhash("")
 	tx.sign_and_send()
-	print(await tx.transaction_response)
 	
 	return tx
 

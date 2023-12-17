@@ -1,13 +1,10 @@
 extends Node3D
 
-var presents = []
-
 func kill_enemy():
 	$Enemies/Enemy01.die()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	presents.resize(31)
 	#w3.play_account = 
 	#w3.play_keypair = Pubkey.new_from_string("EWhQiSu9E3EPQdMC1FmF25Q2FnybTSnFJ4Gby8hG5qCA")
 	#$Ship.load_from_account(w3.play_account.get_public_value())
@@ -43,28 +40,33 @@ func _on_ship_needs_respawn():
 	
 	print("errorr")
 
+func clear_presents():
+	for child in $presents.get_children():
+		child.queue_free()
+		$presents.remove_child(child)
 
 func _on_ship_place_rewards(time, key):
 	const MAX_LENGTH := 100.0
 	var present_resource = preload("res://present/present.tscn")
+	clear_presents()
 	for i in range(key.size() - 1):
-		if presents[i] != null:
-			presents[i].queue_free()
-			remove_child(presents[i])
+		
 
 		var present_pos = Vector3(float((key[i] + time) % 256) / 255.0 - 0.5, 0.0, float((key[i+1] + time) % 256) / 255.0 - 0.5) * 2.0 * MAX_LENGTH;
 		var present = present_resource.instantiate().duplicate()
 		present.player_ref = $Ship
 		present.connect("should_claim", Callable(self, "claim_score"))
 		present.position = present_pos
-		add_child(present)
-		presents[i] = present
+		$presents.add_child(present)
 		
 
 func claim_score():
+	#$RewardSound.play()
 	var tx = w3.claim_score()
 	for i in range(10):
 		if tx.is_confirmed():
 			$Ship.score += 1
 			$Score.text = str($Ship.score)
+			return
+		await get_tree().create_timer(0.5).timeout
 	pass

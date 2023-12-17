@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bj48061wno0py"]
+[gd_scene load_steps=9 format=3 uid="uid://bj48061wno0py"]
 
 [ext_resource type="Script" path="res://ui/start.gd" id="1_kbnq6"]
 [ext_resource type="Texture2D" uid="uid://pteup4orglmu" path="res://title.png" id="2_1jqxb"]
 [ext_resource type="Texture2D" uid="uid://c0rj6brbsvi2p" path="res://phantom_button.png" id="3_bolx2"]
 [ext_resource type="Texture2D" uid="uid://dwoi8wf34nji4" path="res://phantom_button_active.png" id="4_8sc43"]
+[ext_resource type="AudioStream" uid="uid://x6rl1uedq0x2" path="res://sounds/title.wav" id="5_h3l2x"]
+[ext_resource type="AudioStream" uid="uid://b1fjrxuccmtrn" path="res://sounds/toggle.wav" id="6_ryqxi"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hcdcu"]
 texture = ExtResource("3_bolx2")
@@ -43,13 +45,21 @@ theme_override_font_sizes/font_size = 128
 text = "Circuiting"
 
 [node name="Button" type="Button" parent="."]
+modulate = Color(0.666667, 0.666667, 0.666667, 1)
 layout_mode = 0
-offset_left = 239.0
+offset_left = 173.0
 offset_top = 432.0
 offset_right = 546.0
 offset_bottom = 529.0
 theme_override_styles/normal = SubResource("StyleBoxTexture_hcdcu")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_s0y3h")
 expand_icon = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_h3l2x")
+autoplay = true
+
+[node name="ToggleSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_ryqxi")
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

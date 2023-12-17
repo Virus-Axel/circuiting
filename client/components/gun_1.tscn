@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://c8ohnjx3tbnw5"]
+[gd_scene load_steps=7 format=3 uid="uid://c8ohnjx3tbnw5"]
 
 [ext_resource type="PackedScene" uid="uid://3xgl7i40oylv" path="res://components/component.blend" id="1_4mu0j"]
 [ext_resource type="Script" path="res://components/gun_1.gd" id="1_kqilt"]
 [ext_resource type="Script" path="res://components/CSGCylinder3D.gd" id="3_mmv5p"]
+[ext_resource type="AudioStream" uid="uid://b501tvq27nxyx" path="res://sounds/click_component.wav" id="4_xii0c"]
+[ext_resource type="AudioStream" uid="uid://bnjlcod0yx8um" path="res://sounds/gunshot.wav" id="5_okde7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_oq5xe"]
 
@@ -25,6 +27,12 @@ script = ExtResource("3_mmv5p")
 [node name="Timer" type="Timer" parent="CSGCylinder3D"]
 wait_time = 0.3
 one_shot = true
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_xii0c")
+
+[node name="GunShot" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_okde7")
 
 [connection signal="input_event" from="StaticBody3D" to="." method="_on_static_body_3d_input_event"]
 [connection signal="timeout" from="CSGCylinder3D/Timer" to="CSGCylinder3D" method="_on_timer_timeout"]
