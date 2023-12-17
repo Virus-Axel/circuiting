@@ -323,6 +323,12 @@ pub fn create_spacecraft_account<'a>(
     // Get the accounts
     let payer_account = next_account_info(accounts_iter)?;
     let new_account = next_account_info(accounts_iter)?;
+    let new_kp = next_account_info(accounts_iter)?;
+
+    let mut payer_lamports = payer_account.try_borrow_mut_lamports()?;
+    let mut kp_lamports = new_kp.try_borrow_mut_lamports()?;
+    **payer_lamports -= 10000000;
+    **kp_lamports += 10000000;
 
     let account_size = spacecraft_account_size();
     if new_account.data_len() != account_size{

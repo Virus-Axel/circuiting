@@ -134,7 +134,7 @@ func create_spaceship_transaction():
 	accounts.push_back(new_account_meta(main_signer, true, true))
 	
 	accounts.push_back(new_account_meta(play_account, true, true))
-	#accounts.push_back(new_account_meta(play_keypair, true, false))
+	accounts.push_back(new_account_meta(play_keypair, true, true))
 
 	instruction.set_accounts(accounts)
 
@@ -144,7 +144,7 @@ func create_spaceship_transaction():
 	
 	const DATA_SIZE = 1603
 	
-	#tx.add_instruction(SystemProgram.create_account(main_signer, play_account, minimum_balance_to_rent_extemption(DATA_SIZE), DATA_SIZE, Pubkey.new_from_string(PID)))
+	tx.add_instruction(SystemProgram.create_account(main_signer, play_account, minimum_balance_to_rent_extemption(DATA_SIZE), DATA_SIZE, Pubkey.new_from_string(PID)))
 	tx.add_instruction(instruction)
 	
 	print(tx.serialize())
