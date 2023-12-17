@@ -62,4 +62,15 @@ autoplay = true
 [node name="ToggleSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ryqxi")
 
+[node name="Label2" type="Label" parent="."]
+modulate = Color(0.588235, 0.588235, 0.588235, 1)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -32.0
+offset_right = 210.0
+grow_vertical = 0
+text = "Make sure phantom is on testnet "
+
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
