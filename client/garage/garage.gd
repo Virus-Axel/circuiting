@@ -46,7 +46,7 @@ func clear_presents():
 		$presents.remove_child(child)
 
 func _on_ship_place_rewards(time, key):
-	const MAX_LENGTH := 100.0
+	const MAX_LENGTH := 200.0
 	var present_resource = preload("res://present/present.tscn")
 	clear_presents()
 	for i in range(key.size() - 1):

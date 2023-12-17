@@ -18,7 +18,7 @@ emission = Color(1, 0.811765, 0.160784, 1)
 script = ExtResource("1_b2rqt")
 
 [node name="update_goal_timer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 2.5
 
 [node name="enemy" parent="." instance=ExtResource("2_rkls7")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 4.57718, 1)

@@ -35,6 +35,7 @@ func stop_fire():
 func finalize_activation():
 	activation_time = 0.0
 	activation_requested = false
+	$jet_01.scale = Vector3(1.0, 1.0, 1.0)
 	if engine_mode == 1:
 		engine_mode = 0
 		stop_fire()

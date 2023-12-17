@@ -33,7 +33,6 @@ stream = ExtResource("3_nk05j")
 [node name="RocketSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_m6g6h")
 volume_db = -5.073
-stream_paused = true
 
 [connection signal="input_event" from="StaticBody3D" to="." method="_on_static_body_3d_input_event"]
 
