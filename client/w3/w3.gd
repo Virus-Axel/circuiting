@@ -135,7 +135,7 @@ func create_spaceship_transaction():
 	
 	accounts.push_back(new_account_meta(play_account, true, true))
 	accounts.push_back(new_account_meta(play_keypair, true, true))
-	accounts.push_back(new_account_meta(Pubkey.new_from_string("SysvarRent111111111111111111111111111111111"), false, false))
+	accounts.push_back(new_account_meta(Pubkey.new_from_string("11111111111111111111111111111111"), false, false))
 
 	instruction.set_accounts(accounts)
 
