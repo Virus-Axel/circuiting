@@ -32,7 +32,7 @@ func does_account_exist(acc):
 	
 
 func _ready():
-	SolanaClient.set_url("https://api.testnet.solana.com");
+	SolanaClient.set_url("https://api.devnet.solana.com");
 	#SolanaClient.set_url("http://127.0.0.1:8899");
 	SolanaClient.set_encoding("base64")
 	

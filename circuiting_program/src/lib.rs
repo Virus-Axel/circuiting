@@ -18,7 +18,7 @@ use crate::methods::spacecraft::{
     sync_spaceship_account
 };
 
-pub const ID: &str = "2DzKRbWVuGgwiX4rAxQLbR5QzszGcmoKgSp7C1awzFsi";
+pub const ID: &str = "5WhmqFKvvxmHcFcsL6aqkpxvkhcqHZvexGxK3fcNpJBn";
 
 // Declare and export the program's entrypoint
 entrypoint!(process_instruction);

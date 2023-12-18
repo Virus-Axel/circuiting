@@ -71,6 +71,6 @@ anchor_bottom = 1.0
 offset_top = -32.0
 offset_right = 210.0
 grow_vertical = 0
-text = "Make sure phantom is on testnet "
+text = "Make sure phantom is on devnet "
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

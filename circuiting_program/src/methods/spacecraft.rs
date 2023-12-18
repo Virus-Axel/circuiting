@@ -6,7 +6,7 @@ use solana_program::{
     msg,
     program_error::ProgramError,
     pubkey::Pubkey,
-    system_instruction,
+    system_instruction::{self, transfer},
     sysvar::{rent::Rent, Sysvar, clock::Clock},
     program::invoke,
 };
@@ -325,10 +325,12 @@ pub fn create_spacecraft_account<'a>(
     let new_account = next_account_info(accounts_iter)?;
     let new_kp = next_account_info(accounts_iter)?;
 
-    let mut payer_lamports = payer_account.try_borrow_mut_lamports()?;
-    let mut kp_lamports = new_kp.try_borrow_mut_lamports()?;
-    **payer_lamports -= 10000000;
-    **kp_lamports += 10000000;
+    let system_program = next_account_info(accounts_iter)?;
+
+    invoke(
+        &transfer(&payer_account.key, &new_kp.key, 10000000),
+        &[payer_account.clone(), new_kp.clone(), system_program.clone()],
+    )?;
 
     let account_size = spacecraft_account_size();
     if new_account.data_len() != account_size{
@@ -357,7 +359,7 @@ pub fn create_spacecraft_account<'a>(
     set_circulation_point(&mut new_data, vector![0.0, 0.0], 0.0);
     update_timestamp(&mut new_data, current_time);
 
-    set_pcb_array_element(&mut new_data, MAX_BOARD_WIDTH / 2, 0, 1);
+    set_pcb_array_element(&mut new_data, MAX_BOARD_WIDTH / 2, 0, 3);
     set_pcb_array_element(&mut new_data, MAX_BOARD_WIDTH / 2, 1, 1);
     set_pcb_array_element(&mut new_data, MAX_BOARD_WIDTH / 2, 2, 1);
 
