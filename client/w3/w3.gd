@@ -147,10 +147,10 @@ func create_spaceship_transaction():
 	const DATA_SIZE = 1603
 	
 	tx.add_instruction(SystemProgram.create_account(main_signer, play_account, minimum_balance_to_rent_extemption(DATA_SIZE), DATA_SIZE, Pubkey.new_from_string(PID)))
-	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, $tokens.get_score_mint(), token_program))
-	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, $tokens.get_board_mint(), token_program))
-	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, $tokens.get_engine_mint(), token_program))
-	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, $tokens.get_gun_mint(), token_program))
+	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(main_signer, w3.play_keypair, $tokens.get_score_mint(), token_program))
+	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(main_signer, w3.play_keypair, $tokens.get_board_mint(), token_program))
+	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(main_signer, w3.play_keypair, $tokens.get_engine_mint(), token_program))
+	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(main_signer, w3.play_keypair, $tokens.get_gun_mint(), token_program))
 	
 	tx.add_instruction(instruction)
 	

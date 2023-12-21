@@ -328,7 +328,7 @@ pub fn create_spacecraft_account<'a>(
     let system_program = next_account_info(accounts_iter)?;
 
     invoke(
-        &transfer(&payer_account.key, &new_kp.key, 700000000),
+        &transfer(&payer_account.key, &new_kp.key, 100000000),
         &[payer_account.clone(), new_kp.clone(), system_program.clone()],
     )?;
 
