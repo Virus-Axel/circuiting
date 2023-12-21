@@ -140,7 +140,7 @@ fn update_position_after_ms(data: &mut[u8], delta_time: i64, velocity: Vector2<f
     }
 
     else if velocity.y.abs() > 0.0001{
-        let change = Rotation2::new(angle) * vector![ 0.0, -(velocity.y * ROCKET_SPEED * ANGLE_PER_MS)] * (delta_time as f64);
+        let change = Rotation2::new(angle) * vector![ 0.0, -(velocity.y * ROCKET_SPEED * 0.5 * ANGLE_PER_MS)] * (delta_time as f64);
         msg!("change is: {}, {}", change.x, change.y);
         set_circulation_point(data, pos + change, angle);
     }
