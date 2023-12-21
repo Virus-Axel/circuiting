@@ -102,7 +102,7 @@ func fund_broke_accounts():
 	
 
 func load_play_keypair():
-	var message_to_sign := "Note, you may lose every assets earned in this game."
+	var message_to_sign := "Note! you may lose every assets earned in this game."
 	
 	$PhantomController.sign_text_message(message_to_sign)
 	var signature = await $PhantomController.message_signed

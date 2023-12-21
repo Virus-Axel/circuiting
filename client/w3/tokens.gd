@@ -1,9 +1,9 @@
 extends Node
 
-const SCORE_TOKEN: String = "6UtL7uMS5gPHFCNJZ6c7geiW1Pay8s7EYZaGAGJQpZNf"
-const BOARD_TOKEN: String = "AJnkSmYJHJKzf2DoLrfdo2VGaXwWBYS3Y4SjB49mB5Z5"
-const ENGINE_TOKEN: String = "4oG55KQBFbQjqoHiia5mrQTncBp7eWQNgi8dTR7XjTtX"
-const GUN_TOKEN: String = "AbVND8FMvrWow8CUoKHhNWW7GPFcTV2dWod1Thi8jahg"
+const SCORE_TOKEN: String = "HfWUZZV3F8vGRNCfo2RhRozgnZNwozSRTa3us4RxYtdk"
+const BOARD_TOKEN: String = "9XsAhiZ9Ma3nQBrVT2BEzRgm3g1zCSoMVFkEVaowbbY5"
+const ENGINE_TOKEN: String = "5ekoD577DfCxiZm7XzbkMe9y2Hqkso3kQaypD9PENCJC"
+const GUN_TOKEN: String = "HGSEfnWLDumLvcXQ23vsW4tbZMB3TtS895igk8yyaCP8"
 
 const AUTHORITY_SEED: String = "CIRCUITING_AUTHORITY_SEED"
 
