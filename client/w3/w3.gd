@@ -102,7 +102,7 @@ func fund_broke_accounts():
 	
 
 func load_play_keypair():
-	var message_to_sign := "Note, this game interacts with solana. You may lose every assets earned in this game."
+	var message_to_sign := "Note, you may lose every assets earned in this game."
 	
 	$PhantomController.sign_text_message(message_to_sign)
 	var signature = await $PhantomController.message_signed
@@ -116,12 +116,13 @@ func load_play_keypair():
 	are_keys_derived = true
 	
 	await fund_broke_accounts()
-	$tokens.create_token_accounts()
+	#$tokens.create_token_accounts()
 
 	emit_signal("play_key_derived", play_keypair, play_account)
 
 
 func create_spaceship_transaction():
+	var token_program = Pubkey.new_from_string("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")
 	var tx = Transaction.new()
 	tx.set_payer(main_signer)
 	var instruction = Instruction.new()
@@ -146,6 +147,11 @@ func create_spaceship_transaction():
 	const DATA_SIZE = 1603
 	
 	tx.add_instruction(SystemProgram.create_account(main_signer, play_account, minimum_balance_to_rent_extemption(DATA_SIZE), DATA_SIZE, Pubkey.new_from_string(PID)))
+	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, $tokens.get_score_mint(), token_program))
+	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, $tokens.get_board_mint(), token_program))
+	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, $tokens.get_engine_mint(), token_program))
+	tx.add_instruction(AssociatedTokenAccountProgram.create_associated_token_account(w3.play_keypair, w3.play_keypair, $tokens.get_gun_mint(), token_program))
+	
 	tx.add_instruction(instruction)
 	
 	print(tx.serialize())
