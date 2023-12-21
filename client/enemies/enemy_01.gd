@@ -29,7 +29,7 @@ func _process(delta):
 		pass
 	else:
 		position = lerp(start_pos, current_goal, hunt_time)
-		hunt_time += 0.5 * delta
+		hunt_time += delta
 	
 	var angle = Vector2(position.x, position.z).angle_to_point(Vector2(player_ref.position.x, player_ref.position.z))
 	#$enemy.get_node("Armature/Skeleton3D/Sphere").rotation.y = PI / 2.0 -angle

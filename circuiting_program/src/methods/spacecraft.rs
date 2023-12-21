@@ -98,7 +98,7 @@ fn get_velocity(data: &[u8]) -> nalgebra::Vector2<f64>{
 }
 
 fn update_position_after_ms(data: &mut[u8], delta_time: i64, velocity: Vector2<f64>){
-    const ANGLE_PER_MS: f64 = 0.3;
+    const ANGLE_PER_MS: f64 = 0.24;
 
     let angle = f64::from_le_bytes(data[(LOCATION_OFFSET+16)..(LOCATION_OFFSET+24)].try_into().unwrap());
     let mut radius = 0.0;
@@ -328,7 +328,7 @@ pub fn create_spacecraft_account<'a>(
     let system_program = next_account_info(accounts_iter)?;
 
     invoke(
-        &transfer(&payer_account.key, &new_kp.key, 10000000),
+        &transfer(&payer_account.key, &new_kp.key, 700000000),
         &[payer_account.clone(), new_kp.clone(), system_program.clone()],
     )?;
 
